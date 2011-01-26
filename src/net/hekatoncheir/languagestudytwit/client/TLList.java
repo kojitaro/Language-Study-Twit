@@ -1,13 +1,22 @@
 package net.hekatoncheir.languagestudytwit.client;
 
-import net.hekatoncheir.languagestudytwit.client.service.LoginInfo;
+import java.util.ArrayList;
 
+import net.hekatoncheir.languagestudytwit.client.service.LoginInfo;
+import net.hekatoncheir.languagestudytwit.client.service.TwitterLoginInfo;
+import net.hekatoncheir.languagestudytwit.client.service.TwitterService;
+import net.hekatoncheir.languagestudytwit.client.service.TwitterServiceAsync;
+import net.hekatoncheir.languagestudytwit.client.service.TwitterServiceException;
+import net.hekatoncheir.languagestudytwit.client.service.TwitterStatus;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -17,7 +26,7 @@ public class TLList extends Composite {
 
 	private VerticalPanel mTweetList = new VerticalPanel();
 	
-	public TLList(LoginInfo loginInfo) {
+	public TLList(LoginInfo loginInfo, TwitterLoginInfo twitterLoginInfo) {
 		VerticalPanel verticalPanel = new VerticalPanel();
 		initWidget(verticalPanel);
 		
@@ -42,12 +51,30 @@ public class TLList extends Composite {
 		horizontalPanel.setCellVerticalAlignment(mTweetButton, HasVerticalAlignment.ALIGN_BOTTOM);
 		
 		verticalPanel.add(mTweetList);
-		mTweetList.setSize("237px", "100%");
+		mTweetList.setSize("100%", "100%");
+		
+		// start load statuses
+		loadStatuses();
 	}
 
+	private void loadStatuses()
+	{
+		TwitterServiceAsync twitterService = GWT.create(TwitterService.class);
+		twitterService.statuses(new AsyncCallback<ArrayList<TwitterStatus>>() {
+			public void onFailure(Throwable error) {
+				if (error instanceof TwitterServiceException) {
+				}
+			}
+
+			public void onSuccess(ArrayList<TwitterStatus> statuses) {
+			    for (TwitterStatus status : statuses) {
+					TLListCell c = new TLListCell(status);
+					mTweetList.add(c);			    	
+			    }
+			}
+		});
+	}
 	private void tweet()
 	{
-		TLListCell c = new TLListCell();
-		mTweetList.add(c);
 	}
 }

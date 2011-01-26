@@ -1,9 +1,12 @@
 package net.hekatoncheir.languagestudytwit.server;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -11,6 +14,7 @@ import twitter4j.http.RequestToken;
 import net.hekatoncheir.languagestudytwit.client.service.TwitterLoginInfo;
 import net.hekatoncheir.languagestudytwit.client.service.TwitterService;
 import net.hekatoncheir.languagestudytwit.client.service.TwitterServiceException;
+import net.hekatoncheir.languagestudytwit.client.service.TwitterStatus;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -77,5 +81,31 @@ public class TwitterServiceImpl
 		loginInfo.setLoginUrl(requestToken.getAuthenticationURL());
 		
 		return loginInfo;
+	}
+	public ArrayList<TwitterStatus> statuses()  throws TwitterServiceException
+	{
+		ArrayList<TwitterStatus> r = new ArrayList<TwitterStatus>();
+		
+		HttpServletRequest request = getThreadLocalRequest();
+		
+		Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
+		
+		List<Status> statuses;
+		try {
+			statuses = twitter.getFriendsTimeline();
+		} catch (TwitterException e) {
+        	throw new TwitterServiceException();
+		}
+	    for (Status status : statuses) {
+	    	TwitterStatus s = new TwitterStatus();
+	    	s.mText = status.getText();
+	    	s.mCreatedAt = status.getCreatedAt();
+			s.mUserScreenName = status.getUser().getScreenName();
+			s.mUserProfileImageURL = status.getUser().getProfileImageURL().toString();
+			
+			r.add(s);
+	    }
+		
+		return r;
 	}
 }

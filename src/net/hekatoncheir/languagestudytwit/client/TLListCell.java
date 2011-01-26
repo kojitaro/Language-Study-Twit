@@ -1,5 +1,7 @@
 package net.hekatoncheir.languagestudytwit.client;
 
+import net.hekatoncheir.languagestudytwit.client.service.TwitterStatus;
+
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -8,24 +10,24 @@ import com.google.gwt.user.client.ui.Label;
 
 public class TLListCell extends Composite {
 
-	public TLListCell() {
+	public TLListCell(TwitterStatus status) {
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
-		horizontalPanel.setHeight("100 %");
+		horizontalPanel.setSize("100%", "100%");
 		initWidget(horizontalPanel);
 		
-		Image mProfileImage = new Image("image/default_profile.png");
-		horizontalPanel.add(mProfileImage);
-		mProfileImage.setSize("48 px", "48 px");
+		Image profileImage = new Image(status.mUserProfileImageURL);
+		horizontalPanel.add(profileImage);
+		profileImage.setSize("48 px", "48 px");
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		horizontalPanel.add(verticalPanel);
 		
-		Label mProfileScreenName = new Label("ohura_2009");
-		verticalPanel.add(mProfileScreenName);
+		Label profileScreenName = new Label(status.mUserScreenName);
+		verticalPanel.add(profileScreenName);
 		
-		Label mTweet = new Label("If you need to debug JavaScript in the Browser on Android, use console.log() and adb : ./adb logcat | grep WebCore");
-		verticalPanel.add(mTweet);
+		Label tweet = new Label(status.mText);
+		verticalPanel.add(tweet);
 	}
 
 }

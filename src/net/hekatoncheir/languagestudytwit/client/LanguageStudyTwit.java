@@ -66,7 +66,7 @@ public class LanguageStudyTwit implements EntryPoint {
 	private void loadMain()
 	{
 		RootPanel rootPanel = RootPanel.get();
-		TLList l = new TLList(mGoogleLoginInfo);
+		TLList l = new TLList(mGoogleLoginInfo, mTwitterLoginInfo);
 		rootPanel.add(l);
 	}
 	private void loadLogin()

@@ -1,8 +1,6 @@
 package net.hekatoncheir.languagestudytwit.server;
 
 import java.io.IOException;
-import java.util.logging.Logger;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +12,6 @@ import twitter4j.http.RequestToken;
 
 public class TwitterLoginCallback extends HttpServlet {
 
-	private static final Logger log = Logger.getLogger(TwitterLoginCallback.class.getName());
-	
 	/**
 	 * 
 	 */
