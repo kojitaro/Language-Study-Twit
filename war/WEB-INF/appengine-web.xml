@@ -14,9 +14,13 @@
     <exclude path="**.gwt.rpc" />
   </static-files>
 
-  <!-- Configure java.util.logging -->
-  <system-properties>
-    <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
-  </system-properties>
+	<!-- Configure java.util.logging -->
+	<system-properties>
+    	<property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+		<property name="oauth.consumerKey" value="pTq0FlDzz0AhWM4SRNkyzg"/>
+		<property name="oauth.consumerSecret" value="WstBQExok6z5YUaqdu63Il6YIpQWZgd7CwDFMWSEuys"/>
+	</system-properties>
+	
+	<sessions-enabled>true</sessions-enabled>
 
 </appengine-web-app>

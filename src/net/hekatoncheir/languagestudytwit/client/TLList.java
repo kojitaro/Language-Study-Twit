@@ -1,5 +1,7 @@
 package net.hekatoncheir.languagestudytwit.client;
 
+import net.hekatoncheir.languagestudytwit.client.service.LoginInfo;
+
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -8,15 +10,20 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HTML;
 
 public class TLList extends Composite {
 
 	private VerticalPanel mTweetList = new VerticalPanel();
 	
-	public TLList() {
-		
+	public TLList(LoginInfo loginInfo) {
 		VerticalPanel verticalPanel = new VerticalPanel();
 		initWidget(verticalPanel);
+		
+		HTML logout = new HTML("<a href=\"" + loginInfo.getLogoutUrl()+ "\">Logout</a>", true);
+		verticalPanel.add(logout);
+		verticalPanel.setCellHorizontalAlignment(logout, HasHorizontalAlignment.ALIGN_RIGHT);
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel);

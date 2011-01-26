@@ -6,6 +6,31 @@
 <web-app>
   
   <!-- Servlets -->
+  <servlet>
+    <servlet-name>loginService</servlet-name>
+    <servlet-class>net.hekatoncheir.languagestudytwit.server.LoginServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>twitterService</servlet-name>
+    <servlet-class>net.hekatoncheir.languagestudytwit.server.TwitterServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>twitterCallback</servlet-name>
+    <servlet-class>net.hekatoncheir.languagestudytwit.server.TwitterLoginCallback</servlet-class>
+  </servlet>
+    
+  <servlet-mapping>
+    <servlet-name>loginService</servlet-name>
+    <url-pattern>/languagestudytwit/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>twitterService</servlet-name>
+    <url-pattern>/languagestudytwit/twitter</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>twitterCallback</servlet-name>
+    <url-pattern>/languagestudytwit/twitter_callback</url-pattern>
+  </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
