@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HTML;
 public class TLList extends Composite {
 
 	private VerticalPanel mTweetList = new VerticalPanel();
+	private TextBox mTweetText;
 	
 	public TLList(LoginInfo loginInfo, TwitterLoginInfo twitterLoginInfo) {
 		VerticalPanel verticalPanel = new VerticalPanel();
@@ -37,7 +38,7 @@ public class TLList extends Composite {
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
 		verticalPanel.add(horizontalPanel);
 		
-		TextBox mTweetText = new TextBox();
+		mTweetText = new TextBox();
 		horizontalPanel.add(mTweetText);
 		mTweetText.setSize("375px", "58px");
 		
@@ -76,5 +77,18 @@ public class TLList extends Composite {
 	}
 	private void tweet()
 	{
+		TwitterServiceAsync twitterService = GWT.create(TwitterService.class);
+		twitterService.update(mTweetText.getText(), new AsyncCallback<TwitterStatus>() {
+			public void onFailure(Throwable error) {
+				if (error instanceof TwitterServiceException) {
+				}
+			}
+
+			public void onSuccess(TwitterStatus status) {
+				TLListCell c = new TLListCell(status);
+				mTweetList.insert(c, 0);			    	
+			}
+		});
+		
 	}
 }

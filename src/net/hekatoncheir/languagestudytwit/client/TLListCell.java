@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 
 public class TLListCell extends Composite {
 
@@ -19,6 +20,7 @@ public class TLListCell extends Composite {
 		Image profileImage = new Image(status.mUserProfileImageURL);
 		horizontalPanel.add(profileImage);
 		profileImage.setSize("48 px", "48 px");
+		horizontalPanel.setCellWidth(profileImage, "48ox");
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		horizontalPanel.add(verticalPanel);
@@ -26,8 +28,8 @@ public class TLListCell extends Composite {
 		Label profileScreenName = new Label(status.mUserScreenName);
 		verticalPanel.add(profileScreenName);
 		
-		Label tweet = new Label(status.mText);
-		verticalPanel.add(tweet);
+		HTML text = new HTML(status.mText, true);
+		verticalPanel.add(text);
 	}
 
 }

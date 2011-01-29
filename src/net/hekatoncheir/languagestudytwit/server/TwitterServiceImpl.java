@@ -20,6 +20,7 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.twitter.Autolink;
 
 public class TwitterServiceImpl 
 	extends RemoteServiceServlet
@@ -96,9 +97,10 @@ public class TwitterServiceImpl
 		} catch (TwitterException e) {
         	throw new TwitterServiceException();
 		}
+		Autolink autolink = new Autolink();
 	    for (Status status : statuses) {
 	    	TwitterStatus s = new TwitterStatus();
-	    	s.mText = status.getText();
+	    	s.mText = autolink.autoLink(status.getText());
 	    	s.mCreatedAt = status.getCreatedAt();
 			s.mUserScreenName = status.getUser().getScreenName();
 			s.mUserProfileImageURL = status.getUser().getProfileImageURL().toString();
@@ -107,5 +109,25 @@ public class TwitterServiceImpl
 	    }
 		
 		return r;
+	}
+	public TwitterStatus update(String text) throws TwitterServiceException
+	{
+		Autolink autolink = new Autolink();
+		HttpServletRequest request = getThreadLocalRequest();
+
+		Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
+		Status status;
+		try {
+			status = twitter.updateStatus(text);
+		} catch (TwitterException e) {
+        	throw new TwitterServiceException();
+		}
+    	TwitterStatus s = new TwitterStatus();
+    	s.mText = autolink.autoLink(status.getText());
+    	s.mCreatedAt = status.getCreatedAt();
+		s.mUserScreenName = status.getUser().getScreenName();
+		s.mUserProfileImageURL = status.getUser().getProfileImageURL().toString();
+		
+		return s;
 	}
 }

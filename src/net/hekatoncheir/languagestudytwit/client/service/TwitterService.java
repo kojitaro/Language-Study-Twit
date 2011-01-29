@@ -10,4 +10,5 @@ public interface TwitterService extends RemoteService {
 	public TwitterLoginInfo login() throws TwitterServiceException;
 	
 	public ArrayList<TwitterStatus> statuses()  throws TwitterServiceException;
+	public TwitterStatus update(String text) throws TwitterServiceException;
 }
