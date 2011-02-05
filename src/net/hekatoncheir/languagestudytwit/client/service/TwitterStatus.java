@@ -9,4 +9,5 @@ public class TwitterStatus implements IsSerializable{
 	public Date mCreatedAt;
 	public String mUserScreenName;
 	public String mUserProfileImageURL;
+	public long mTweetId;
 }

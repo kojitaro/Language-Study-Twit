@@ -9,6 +9,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface TwitterService extends RemoteService {
 	public TwitterLoginInfo login() throws TwitterServiceException;
 	
-	public ArrayList<TwitterStatus> statuses()  throws TwitterServiceException;
+	public ArrayList<TwitterStatus> statuses(long sinceTweetId)  throws TwitterServiceException;
 	public TwitterStatus update(String text) throws TwitterServiceException;
 }

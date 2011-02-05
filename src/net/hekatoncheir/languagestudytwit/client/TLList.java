@@ -9,6 +9,7 @@ import net.hekatoncheir.languagestudytwit.client.service.TwitterServiceAsync;
 import net.hekatoncheir.languagestudytwit.client.service.TwitterServiceException;
 import net.hekatoncheir.languagestudytwit.client.service.TwitterStatus;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -22,13 +23,18 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HTML;
 
-public class TLList extends Composite {
+public class TLList extends Composite implements com.google.gwt.user.client.Window.ScrollHandler{
 
 	private VerticalPanel mTweetList = new VerticalPanel();
 	private TextBox mTweetText;
+	private VerticalPanel verticalPanel;
+	
+	private long mLatestTweetId;
 	
 	public TLList(LoginInfo loginInfo, TwitterLoginInfo twitterLoginInfo) {
-		VerticalPanel verticalPanel = new VerticalPanel();
+		Window.addWindowScrollHandler(this);
+		
+		verticalPanel = new VerticalPanel();
 		initWidget(verticalPanel);
 		
 		HTML logout = new HTML("<a href=\"" + loginInfo.getLogoutUrl()+ "\">Logout</a>", true);
@@ -55,13 +61,13 @@ public class TLList extends Composite {
 		mTweetList.setSize("100%", "100%");
 		
 		// start load statuses
-		loadStatuses();
+		loadStatuses(-1);
 	}
-
-	private void loadStatuses()
+	
+	private void loadStatuses(long sinceTweetId)
 	{
 		TwitterServiceAsync twitterService = GWT.create(TwitterService.class);
-		twitterService.statuses(new AsyncCallback<ArrayList<TwitterStatus>>() {
+		twitterService.statuses(sinceTweetId, new AsyncCallback<ArrayList<TwitterStatus>>() {
 			public void onFailure(Throwable error) {
 				if (error instanceof TwitterServiceException) {
 				}
@@ -69,8 +75,12 @@ public class TLList extends Composite {
 
 			public void onSuccess(ArrayList<TwitterStatus> statuses) {
 			    for (TwitterStatus status : statuses) {
+			    	if( mLatestTweetId == status.mTweetId)continue;
+			    	
 					TLListCell c = new TLListCell(status);
-					mTweetList.add(c);			    	
+					mTweetList.add(c);		
+					
+					mLatestTweetId = status.mTweetId;
 			    }
 			}
 		});
@@ -90,5 +100,20 @@ public class TLList extends Composite {
 			}
 		});
 		
+	}
+
+	@Override
+	public void onWindowScroll(
+			com.google.gwt.user.client.Window.ScrollEvent event)
+	{
+		int scrollTop = Window.getScrollTop();
+		int windowHeight = Window.getClientHeight();
+		
+		int contentHeight = verticalPanel.getOffsetHeight();
+		
+		if( scrollTop >= contentHeight-windowHeight){
+			// 追加でロード
+			loadStatuses(mLatestTweetId);
+		}
 	}
 }

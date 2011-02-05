@@ -30,6 +30,9 @@ public class TLListCell extends Composite {
 		
 		HTML text = new HTML(status.mText, true);
 		verticalPanel.add(text);
+		
+		HTML date = new HTML(status.mCreatedAt.toString(), true);
+		verticalPanel.add(date);
 	}
 
 }

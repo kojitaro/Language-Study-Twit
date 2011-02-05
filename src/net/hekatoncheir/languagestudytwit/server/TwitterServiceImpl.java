@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -83,7 +84,7 @@ public class TwitterServiceImpl
 		
 		return loginInfo;
 	}
-	public ArrayList<TwitterStatus> statuses()  throws TwitterServiceException
+	public ArrayList<TwitterStatus> statuses(long sinceTweetId)  throws TwitterServiceException
 	{
 		ArrayList<TwitterStatus> r = new ArrayList<TwitterStatus>();
 		
@@ -93,17 +94,25 @@ public class TwitterServiceImpl
 		
 		List<Status> statuses;
 		try {
-			statuses = twitter.getFriendsTimeline();
+			if( sinceTweetId > 0 ){
+				Paging page= new Paging(1);
+				page.maxId(sinceTweetId);
+				statuses = twitter.getFriendsTimeline(page);
+			}else{
+				statuses = twitter.getFriendsTimeline();
+			}
 		} catch (TwitterException e) {
         	throw new TwitterServiceException();
 		}
-		Autolink autolink = new Autolink();
+		//Autolink autolink = new Autolink();
 	    for (Status status : statuses) {
 	    	TwitterStatus s = new TwitterStatus();
-	    	s.mText = autolink.autoLink(status.getText());
+	    	s.mText = status.getText();
+//	    	s.mText = autolink.autoLink(status.getText());
 	    	s.mCreatedAt = status.getCreatedAt();
 			s.mUserScreenName = status.getUser().getScreenName();
 			s.mUserProfileImageURL = status.getUser().getProfileImageURL().toString();
+			s.mTweetId = status.getId();
 			
 			r.add(s);
 	    }

@@ -6,6 +6,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface TwitterServiceAsync {
 	void login(AsyncCallback<TwitterLoginInfo> callback);
-	void statuses(AsyncCallback<ArrayList<TwitterStatus>> callback);
+	void statuses(long sinceTweetId, AsyncCallback<ArrayList<TwitterStatus>> callback);
 	void update(String text, AsyncCallback<TwitterStatus> callback);
 }
